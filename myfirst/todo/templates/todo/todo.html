@@ -1,0 +1,63 @@
+{% extends 'todo/index.html' %}
+
+
+{% block content %}
+  {% if tasks %}
+    <div class="accordion" id="accordionExample">
+      {% for task in tasks %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button
+              class="accordion-button {% if active_task != task.id %} collapsed {% endif %}"
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#collapse{{task.id}}" 
+              aria-expanded="true" 
+              aria-controls="collapse{{task.id}}">
+              {% if task.is_completed %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                  <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
+                  <path d="M8.354 10.354l7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1  0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                </svg>
+              {% endif %}
+              <span class="px-2"> {{task.title}}</span>
+            </button>
+          </h2>
+          <div id="collapse{{task.id}}" class="accordion-collapse collapse 
+            {% if active_task == task.id %} show {% endif %}" 
+            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">{{task.text}}</div>
+
+            {% if task.comments %}
+              {% for comment in task.comments %}
+                <div class="accordion-body my-0 py-1">      
+                  <div class="alert alert-secondary py-2, my-0" role="alert">
+                    <div class="row g-3">
+                      <div class="col-auto"><a type="button" class="btn-close d-block" href="{% url 'todo:delete_comment' comment.id %}"></a></div>
+                      <div class="col-auto"><span>{{comment.text}}</span></div>
+                      <div class="col-auto"></div>              
+                    </div> 
+                  </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <div class=".container accordion-body">
+              {% if task.is_completed %}
+                <a type="button" class="btn btn-outline-warning" href="{% url 'todo:uncompleted' task.id %}">Снять отметку</a>
+              {% else %}
+                <a type="button" class="btn btn-outline-primary" href="{% url 'todo:completed' task.id %}">Отметить как выполненая</a>
+              {% endif %}
+              <a type="button" class="btn btn-outline-secondary" href="{% url 'todo:create_comment' task.id %}">Добавить комментарий</a>
+              <a type="button" class="btn btn-outline-danger" href="{% url 'todo:delete' task.id %}">Удалить задачу</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info" role="alert">
+      У вас пока-что нет никаких задач 
+    </div>
+  {% endif %}
+{% endblock %}

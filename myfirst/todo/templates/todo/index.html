@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Мой сайт первый на Django{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    {% block header %}
+      <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <p class="h5 my-0 me-md-auto fw-normal my-1">#Todo <span class="blockquote-footer">завтра доделаю</span></p>
+        <a type="button" class="btn btn-outline-primary" href="{% url 'todo:create' %}" >Добавить задачу</a>
+     </header>
+    {% endblock %}
+
+  <main class="container">
+    <!-- Фильтр задач -->
+    {% block filter %}
+      <div class="btn-group container w-75 d-flex justify-content-center" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" {% if filter == "all_tasks" %}checked{% endif %}>
+        <a class="btn btn-outline-primary" for="btnradio1" href="{% url 'todo:index' %}">Все задачи</a>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" {% if filter == "completed_tasks" %}checked{% endif %}>
+        <a class="btn btn-outline-primary" for="btnradio2" href="{% url 'todo:completed_tasks' %}">Выполненые</a>
+
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" {% if filter == "uncompleted_tasks" %}checked{% endif %}>
+        <a class="btn btn-outline-primary" for="btnradio3" href="{% url 'todo:uncompleted_tasks' %}">Не выполненые</a>
+      </div>
+    {% endblock %}
+
+    <div class="container mt-3">
+     {% block content %} {% endblock %}
+    </div>
+  </main>
+</body>
+</html>
+
