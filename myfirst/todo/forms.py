@@ -32,10 +32,10 @@ class CommentForm(ModelForm):
 		fields = ['text']
 
 		widgets = {
-			'text': TextInput(attrs={
-				'type': 'input',  
+			'text': Textarea(attrs={
 				'class': 'form-control',
-				'id': 'exampleFormControlInput1',
-				'placeholder': 'введите коментарий',
+				'id': 'exampleFormControlTextarea1',
+				'rows': '3',
+				'placeholder': 'детальное описание задачи',
 			}),
 		}

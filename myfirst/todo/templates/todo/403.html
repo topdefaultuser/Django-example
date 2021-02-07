@@ -1,0 +1,20 @@
+{% extends 'todo/index.html' %}
+
+
+{% block filter %}{% endblock %}
+
+{% block content %}
+    <div class="d-flex h-100 text-center text-dark bg-white ">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+        <main class="px-3">
+            <h1>Отказано в доступе</h1>
+            <p class="lead">В ходе выполнения программы возникли какие-то неполадки. Попробуйте повторить попытку еще раз.</p>
+            <p class="lead">Если данная ошибка возникает вновь, возможно возникли проблемы с генерацией  страницы. Либо используется не тот способ передачи данных GET/POST.</p>
+            <p class="lead">
+                <a href="{% url 'todo:index' %}" class="btn btn-lg btn-secondary fw-bold border-dark bg-dark">На главную</a>
+            </p>
+          </main>
+        </div>
+       </div>
+{% endblock %}

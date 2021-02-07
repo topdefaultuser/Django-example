@@ -1,0 +1,19 @@
+{% extends 'todo/index.html' %}
+
+
+{% block filter %}{% endblock %}
+
+{% block content %}
+    <div class="d-flex h-100 text-center text-dark bg-white ">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+        <main class="px-3">
+            <h1>Запрашиваемые данные не найдены.</h1>
+            <p class="lead">Не удалось найти данные которые вы запросили, возможно, вы случайно повторили одно и то же действие.</p>
+            <p class="lead">
+                <a href="{% url 'todo:index' %}" class="btn btn-lg btn-secondary fw-bold border-dark bg-dark">На главную</a>
+            </p>
+          </main>
+        </div>
+       </div>
+{% endblock %}
