@@ -16,26 +16,23 @@
 
 <!-- Добавление новой задачи-->
 {% block content %} 
-  <form action="{% url 'todo:create' %}" method="post">
+  <form action="{% url 'todo:create_task' %}" method="post">
     {% csrf_token %}
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Добавление задачи</h5>
           </div>
-
           <div class="modal-body">
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Имя задачи</label>
                 {{form.title}}
             </div>
-    
             <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
                 {{form.text}}
             </div>
           </div>
-
           <div class="modal-footer">
             <a type="button" class="btn btn-secondary" href="{% url 'todo:index' %}">Отмена</a>
             <button type="submit" class="btn btn-primary">Добавить</button>

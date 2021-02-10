@@ -17,27 +17,23 @@
 {% block content %} 
   <form action="{% url 'todo:create_comment' %}" method="post">
     {% csrf_token %}
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Добавление комментария</h5>
-          </div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Добавление комментария</h5>
+        </div>
 
-          <div class="modal-body">  
-            <div class="mb-3">
-              <label for="exampleFormControlTextarea1" class="form-label">Комментарий</label>
-              {{form.text}}
-          </div>
+        <div class="modal-body">  
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Комментарий</label>
+            {{form.text}}
+        </div>
 
-          <div class="modal-footer">
-            <a type="button" class="btn btn-secondary" href="{% url 'todo:index' %}">Отмена</a>
-            <button type="submit" class="btn btn-primary">Добавить</button>
-          </div>
-          <input type="hidden" name="task_id" value="{{task_id}}">
-       </div>
-       {% if error %}
-         <div class="alert alert-danger mt-3" role="alert">{{error}}</div>
-       {% endif %}
+        <div class="modal-footer">
+          <a type="button" class="btn btn-secondary" href="{% url 'todo:index' %}">Отмена</a>
+          <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+        <input type="hidden" name="task_id" value="{{task_id}}">
       </div>
     </div>
   </form>

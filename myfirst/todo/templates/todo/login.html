@@ -1,0 +1,20 @@
+{% extends 'todo/index.html' %}
+
+
+{% block title %} Авторизация пользователя {% endblock %}
+
+{% block filter %}{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center text-center">
+        <main class="form-signin d-flex">
+            <form action="{% url 'todo:login' %}" method="post">
+                <h1 class="h3 mb-3 fw-normal">Авторизация</h1>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+                <a class="text-decoration-none" href="{% url 'todo:register' %}">Регистрация</a>
+            </form>
+        </main>
+    </div>
+{% endblock %}

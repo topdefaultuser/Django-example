@@ -1,0 +1,30 @@
+<!-- Фильтр задач -->
+{% block filter %}
+<!-- Кнопки для отправки ajax запросов -->
+<div class="js_filter_button">
+  <div class="btn-group d-flex justify-content-center">
+    <a id="js_filter_button_all" class="btn custom-btn js_filter_buttons custom-btn-hover d-none" 
+      onclick=all_tasks()>Все задачи</a>
+
+    <a id="js_filter_button_completed" class="btn custom-btn js_filter_buttons d-none" 
+      onclick=completed_tasks()>Выполненые</a>
+
+    <a id="js_filter_button_uncompleted" class="btn custom-btn js_filter_buttons d-none" 
+      onclick=uncompleted_tasks()>Невыполненные</a>
+  </div>    
+</div>
+
+<div class="url_filter_button">
+  <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic radio toggle button group">
+
+    <a class="btn custom-btn url_filter_buttons {% if filter == "all_tasks" %}custom-btn-hover{% endif %}" 
+      for="btnradio1" href="{% url 'todo:all_tasks' %}">Все задачи</a>
+
+    <a class="btn custom-btn url_filter_buttons {% if filter == "completed_tasks" %}custom-btn-hover{% endif %}" 
+      for="btnradio2" href="{% url 'todo:completed_tasks' %}">Выполненые</a>
+
+    <a class="btn custom-btn url_filter_buttons {% if filter == "uncompleted_tasks" %}custom-btn-hover{% endif %}"
+      for="btnradio3" href="{% url 'todo:uncompleted_tasks' %}">Невыполненные</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% block modal_append_task %}
+  <!-- Модальное окно для создания новой задачи-->
+  <div class="modal fade" id="addTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Добавление задачи</h5>
+        </div>
+        <div class="modal-body">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="task-title-input" class="form-label">Имя задачи</label>
+                <input type="input" name="title" class="form-control" id="task-title-input" 
+                  placeholder="коротко о задаче" maxlength="150">
+            </div>
+            <div class="mb-3">
+              <label for="task-text-input" class="form-label">Описание</label>
+                <textarea name="text" cols="40" rows="3" class="form-control" id="task-text-input" 
+                  placeholder="детальное описание задачи"></textarea>
+            </div>
+            <div class="modal-footer">
+              <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена </a>
+              <button class="btn btn-primary" data-bs-dismiss="modal"
+                onclick="api_append_task('{% url "todo:api_append_task" %}')">Добавить</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

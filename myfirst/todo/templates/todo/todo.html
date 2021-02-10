@@ -1,5 +1,6 @@
 {% extends 'todo/index.html' %}
 
+{% block title %} {{title}} {% endblock %}
 
 {% block content %}
   <!-- Блок предуприждения о работе js -->
@@ -10,104 +11,30 @@
       </div>
     </div>
   {% endblock %}
-  <!-- Фильтр задач -->
-  {% block filter %}
-  <!-- Кнопки для отправки ajax запросов -->
-  <div class="js_filter_button">
-    <div class="btn-group container d-flex justify-content-center">
-      <a id="js_filter_button_all" class="btn btn-outline-primary js_filter_buttons btn-outline-primary-hover d-none" 
-        onclick=all_tasks()>Все задачи</a>
 
-      <a id="js_filter_button_completed" class="btn btn-outline-primary js_filter_buttons d-none" 
-        onclick=completed_tasks()>Выполненые</a>
-
-      <a id="js_filter_button_uncompleted" class="btn btn-outline-primary js_filter_buttons d-none" 
-        onclick=uncompleted_tasks()>Невыполненные</a>
-    </div>    
-  </div>
-
-  <div class="url_filter_button">
-    <div class="btn-group container d-flex justify-content-center" role="group" aria-label="Basic radio toggle button group">
-      <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" {% if filter == "all_tasks" %}checked{% endif %}>
-      <a class="btn btn-outline-primary url_filter_buttons" for="btnradio1" href="{% url 'todo:all_tasks' %}">Все задачи</a>
-
-      <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" {% if filter == "completed_tasks" %}checked{% endif %}>
-      <a class="btn btn-outline-primary url_filter_buttons" for="btnradio2" href="{% url 'todo:completed_tasks' %}">Выполненые</a>
-
-      <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" {% if filter == "uncompleted_tasks" %}checked{% endif %}>
-      <a class="btn btn-outline-primary url_filter_buttons" for="btnradio3" href="{% url 'todo:uncompleted_tasks' %}">Невыполненные</a>
-    </div>
-  </div>
+  {% block modal_append_comment %}
+    {% include 'todo/modal_append_comment.html' %}
   {% endblock %}
 
-  <!-- Модальное окно для создания комментария -->
-  <div class="modal fade" id="addComment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Добавление комментария</h5>
-      </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="comment-body" class="form-label">Комментарий</label>
-            <textarea class="form-control" id="comment-body" name="text"></textarea>
-            <input type="hidden" class="form-control" name="task_id" id="comment-task-id"></input>
-            {% csrf_token %}
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" 
-            data-bs-dismiss="modal">Отмена</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" 
-            onclick="api_append_comment('{% url "todo:api_append_comment" %}')">Добавить</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Модальное окно для создания новой задачи-->
-  <div class="modal fade" id="addTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Добавление задачи</h5>
-        </div>
-
-        <div class="modal-body">
-            {% csrf_token %}
-                
-            <div class="mb-3">
-              <label for="task-title-input" class="form-label">Имя задачи</label>
-                <input type="input" name="title" class="form-control" id="task-title-input" 
-                  placeholder="коротко о задаче" maxlength="150">
-            </div>
-    
-            <div class="mb-3">
-              <label for="task-text-input" class="form-label">Описание</label>
-                <textarea name="text" cols="40" rows="3" class="form-control" id="task-text-input" 
-                  placeholder="детальное описание задачи"></textarea>
-            </div>
-
-            <div class="modal-footer">
-              <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена </a>
-              <button class="btn btn-primary" data-bs-dismiss="modal"
-                onclick="api_append_task('{% url "todo:api_append_task" %}')">Добавить</button>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  {% block modal_append_task %}
+    {% include 'todo/modal_append_task.html' %}
+  {% endblock %}
 
   <div id='task-conteiner' class="container mt-3">
     <div class="accordion" id="accordionExample">
+
+      <div id="accordion-header" class="accordion-item accordion-filter-buttons">
+        {% block filter %}
+          {% include 'todo/task_filter.html'%}
+        {% endblock %}
+      </div>
+
       {% for task in tasks %}
         <div id="accordion-item-{{task.id}}" 
           class="accordion-item task-state-{% if task.is_completed %}completed{% else %}uncompleted{% endif %}">
           <h2 class="accordion-header" id="headingOne">
             <button
-              class="accordion-button {% if active_task != task.id %} collapsed {% endif %}"
+              class="accordion-button {% if active_task != task.id %} not-collapsed-flag {% endif %} auto-collapsed-flag"
               type="button" 
               data-bs-toggle="collapse" 
               data-bs-target="#collapse{{task.id}}" 
@@ -123,14 +50,14 @@
               <span class="px-2">{{task.title}}</span>
             </button>
           </h2>
-          <div id="collapse{{task.id}}" class="accordion-collapse collapse 
+          <div id="collapse{{task.id}}" class="accordion-collapse auto-collapse-flag
             {% if active_task == task.id %} show {% endif %}" 
             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="accordion-body">{{task.text}}</div>
 
             <div id="comment-container-{{task.id}}">
               {% if task.comments %}
-                {% for comment in task.comments %}
+                {% for comment in task.comments.all reversed %}
                   <div id="comment-body-{{comment.id}}" class="accordion-body my-0 py-1">      
                     <div class="alert alert-secondary py-1 my-0" role="alert">
                       <div class="row g-3">
@@ -141,7 +68,7 @@
                       
                         <!-- Кнопка для работы по GET запросам -->
                         <a type="button" class="col-auto btn-close url_buttons d-flex" 
-                            href="{% url 'todo:delete_comment' %}?comment_id={{comment.id}}">
+                            href="{% url 'todo:delete_comment' comment.id %}">
                         </a>
 
                         <div class="col-auto"><span>{{comment.text}}</span></div>
@@ -165,28 +92,37 @@
                   onclick="make_change_task_status_requests('{% url "todo:api_set_completed_status" %}', {{task.id}})">Отметить как выполненая</button>        
               </div>
 
-              <button type="button" class="btn btn-outline-secondary me-1" data-bs-toggle="modal" 
+              <button type="button" class="me-1 btn btn-outline-secondary" data-bs-toggle="modal" 
                 data-bs-target="#addComment" onclick="add_task_id_to_modal_form({{task.id}})">
                 Добавить комментарий
               </button>
              
               <button type="button" class="me-1 btn btn-outline-danger" 
                 onclick="make_delete_task_requests('{% url "todo:api_delete_task" %}', {{task.id}})">Удалить задачу</button>
+
+                <a type="button" class="me-1 btn btn-outline-success"
+                  href="{% url 'todo:update_task' task.id %}">Изменить</a>
             </div>
 
             <!-- Кнопки для работы по GET запросам -->
             <div class=".container accordion-body url_buttons d-flex">  
               {% if task.is_completed %}
                 <a type="button" class="btn btn-outline-warning {% if task.is_completed %} d-flex {% else %} d-none {% endif %} me-1"
-                  href="{% url 'todo:uncompleted'%}?task_id={{task.id}}">Снять отметку</a>
+                  href="{% url 'todo:uncompleted' task.id %}">Снять отметку</a>
               {% else %}
                 <a type="button" class="btn btn-outline-primary {% if task.is_completed %} d-none {% else %} d-flex {% endif %} me-1" 
-                  href="{% url 'todo:completed'%}?task_id={{task.id}}">Отметить как выполненая</a>
+                  href="{% url 'todo:completed' task.id %}">Отметить как выполненая</a>
               {% endif %}
+              
               <a type="button" class="btn btn-outline-secondary me-1" 
                 href="{% url 'todo:create_comment' %}?task_id={{task.id}}">Добавить комментарий</a>
+              
               <a type="button" class="btn btn-outline-danger me-1" 
-                href="{% url 'todo:delete' %}?task_id={{task.id}}">Удалить задачу</a>
+                href="{% url 'todo:delete_task' task.id %}">Удалить задачу</a>
+
+              <a type="button" class="me-1 btn btn-outline-success"
+                href="{% url 'todo:update_task' task.id %}">Изменить</a>
+
             </div>
           
           </div>
@@ -199,7 +135,7 @@
           </button>
 
           <button class="btn accordion-add-button justify-content-center url_buttons">
-            <a class="text-decoration-none" href="{% url 'todo:create' %}">Добавить задачу</a>
+            <a class="text-decoration-none" href="{% url 'todo:create_task' %}">Добавить задачу</a>
           </button>
       </div>
     </div>

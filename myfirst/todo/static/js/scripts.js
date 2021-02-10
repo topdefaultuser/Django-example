@@ -33,6 +33,19 @@ function display_available_filter_buttons() {
 }
 
 
+function fold_accordion(){
+	$(".auto-collapsed-flag").each(function(){
+		$(this).removeClass("auto-collapsed-flag");
+		$(this).addClass("collapsed");
+	});
+
+	$(".auto-collapse-flag").each(function(){
+		$(this).removeClass("auto-collapse-flag");
+		$(this).addClass("collapse");
+	});
+
+}
+
 /* Изменение состояния задания (выполнено /не выполнено)*/
 function change_task_status(data){
 	if(data.responseJSON.result === "ok"){
@@ -59,9 +72,9 @@ function show_completed_tasks(){
 		$(this).removeClass("d-none");
 	});
 
-	$("#js_filter_button_completed").addClass("btn-outline-primary-hover")
-	$("#js_filter_button_uncompleted").removeClass("btn-outline-primary-hover")
-	$("#js_filter_button_all").removeClass("btn-outline-primary-hover")
+	$("#js_filter_button_completed").addClass("custom-btn-hover")
+	$("#js_filter_button_uncompleted").removeClass("custom-btn-hover")
+	$("#js_filter_button_all").removeClass("custom-btn-hover")
 }
 
 
@@ -77,9 +90,9 @@ function show_uncompleted_tasks(){
 		$(this).removeClass("d-none");
 	});
 
-	$("#js_filter_button_uncompleted").addClass("btn-outline-primary-hover")
-	$("#js_filter_button_completed").removeClass("btn-outline-primary-hover")
-	$("#js_filter_button_all").removeClass("btn-outline-primary-hover")
+	$("#js_filter_button_uncompleted").addClass("custom-btn-hover")
+	$("#js_filter_button_completed").removeClass("custom-btn-hover")
+	$("#js_filter_button_all").removeClass("custom-btn-hover")
 }
 
 
@@ -94,9 +107,9 @@ function all_tasks(){
 	show_completed_tasks();
 	show_uncompleted_tasks();
 
-	$("#js_filter_button_all").addClass("btn-outline-primary-hover")
-	$("#js_filter_button_uncompleted").removeClass("btn-outline-primary-hover")
-	$("#js_filter_button_completed").removeClass("btn-outline-primary-hover")
+	$("#js_filter_button_all").addClass("custom-btn-hover")
+	$("#js_filter_button_uncompleted").removeClass("custom-btn-hover")
+	$("#js_filter_button_completed").removeClass("custom-btn-hover")
 }
 
 
@@ -149,10 +162,16 @@ function append_task_handler(data){
 		             	"<button type='button' class='me-1 btn btn-outline-danger' "+
 		             	"onclick=make_delete_task_requests('/todo/api_delete_task'," + data.responseJSON.task_id + ")>Удалить задачу</button>"+
         			"</div>")
-        $("#task-conteiner").prepend(div)
-		}
-}
 
+        $("#accordion-header").after(div)
+
+        /* Если задач не было, и мы добавили задачу, скроет надпись предупреждающую о отсутствии задач*/
+        if(!$("#empty-tasks-alert").hasClass('d-none')){
+        	$("#empty-tasks-alert").toggleClass('d-none')
+        }
+        
+	}
+}
 
 
 function delete_task_handler(data){
@@ -161,7 +180,7 @@ function delete_task_handler(data){
 		}
 
 	/* Если удалили все елементы */
-	if($(".accordion-item").length === 1){
+	if($(".accordion-item").length === 2){
 		$("#empty-tasks-alert").toggleClass("d-none");
 	}
 }
@@ -264,7 +283,6 @@ function api_append_task(url){
 	$("#task-text-input").val(""),
 
 	make_append_task_requests(url, data);
-
 }
 
 
@@ -281,6 +299,11 @@ function main (jQuery){
 	будут скрывать ненужные и отображать нужные элементы.
 	*/
 	display_available_filter_buttons();
+	/* Если javascript работает, автоматически сложит аккордеон. 
+	Без поддержки работы  javascript , аккордеон будет всегда в разложенном состоянии, 
+	и его не можно будет сложить. */
+	fold_accordion()
+
 }
 
 /* Ждет полной загрузки страницы и запускает функцию main */

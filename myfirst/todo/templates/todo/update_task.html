@@ -1,0 +1,43 @@
+{% extends 'todo/index.html' %}
+
+
+{% block title %}
+    Добавление новой задачи
+{% endblock %} 
+
+
+{% block header %}
+  <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <p class="h5 my-0 me-md-auto fw-normal my-1">#Todo <span class="blockquote-footer">просто запиши это</span></p>
+    <a type="button" class="btn btn-outline-danger" href="{% url 'todo:index' %}">Назад к задачам</a>
+  </header>
+{% endblock %}
+
+
+<!-- Добавление новой задачи-->
+{% block content %} 
+  <form action="{% url 'todo:update_task' task.id %}" method="post">
+    {% csrf_token %}
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Добавление задачи</h5>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Имя задачи</label>
+              {{form.title}}
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+              {{form.text}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-secondary" href="{% url 'todo:index' %}">Отмена</a>
+          <button type="submit" class="btn btn-primary">Обновить</button>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}

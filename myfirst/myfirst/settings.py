@@ -110,6 +110,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Если пользователь не авторизирован, отправит на страницу авторизации 
+LOGIN_URL = 'todo:login'
+# Перенаправляет на главную страницу после авторизации
+LOGIN_REDIRECT_URL = 'todo:index'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
